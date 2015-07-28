@@ -1,0 +1,37 @@
+{
+  "name": "angular-canvas-painter",
+  "version": "0.3.0",
+  "authors": [
+    "Philipp Wambach"
+  ],
+  "description": "Angular module to easily paint on a canvas with mouse or touch devices",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/pwambach/angular-canvas-painter.git"
+  },
+  "main": "dist/angular-canvas-painter.js",
+  "keywords": [
+    "angular",
+    "canvas",
+    "directive",
+    "paint",
+    "sketch",
+    "draw",
+    "touch"
+  ],
+  "ignore": [
+  	".gitignore",
+  	"gulpfile.js",
+  	".jshintrc",
+  	".editorconfig",
+  	"templates",
+  	"js",
+  	"index.html",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "angular": "~1.4.1"
+  },
+  "license": "MIT"
+}
