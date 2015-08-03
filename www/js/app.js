@@ -146,6 +146,9 @@ angular.module('starter', ['ionic', 'firebase'])
     lastPoint = [x1, y1];
   };
 
+
+  // Drawing is broken on mobile ATM (◞‸◟；)
+  // TODO: Figure out whats up.
   $(myCanvas).on('mousedown', drawLineOnMouseMove);
   $(myCanvas).on('mousemove', drawLineOnMouseMove);
 
