@@ -2,7 +2,8 @@
   "name": "HelloIonic",
   "private": "true",
   "devDependencies": {
-    "ionic": "driftyco/ionic-bower#1.0.1"
+    "ionic": "driftyco/ionic-bower#1.0.1",
+    "angularfire": "~1.1.2"
   },
   "dependencies": {
     "angular-canvas-painter": "~0.3.0"
