@@ -38,10 +38,9 @@
     </ion-header-bar>
     <ion-content>
       <button ng-click="modal.show()" ng-hide="authData" class="button button-positive button-block">Login</button>
-      <div>{{authData}}</div>
       <div ng-show="authData">
         <div class="l-demo-container">
-          <canvas data-tap-disabled="true" id="drawing-canvas" width="300" height="300"></canvas>
+          <canvas id="drawing-canvas" width="300" height="300"></canvas>
         </div>
         <div id="colorholder"></div>
       </div>
