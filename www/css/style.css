@@ -35,3 +35,16 @@
 .l-demo-container {
   margin:30px
 }
+
+/*Right side menu*/
+
+.profile-img {
+  border-radius: 3px;
+  float: left;
+}
+
+.twitter-username {
+  float: right;
+  display: inline-block;
+  margin-top: 10px;
+}

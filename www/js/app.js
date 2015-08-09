@@ -28,80 +28,15 @@ angular.module('starter', ['ionic', 'firebase'])
   return data;
 })
 
-.factory('RandomWord', function() {
-  var words = ['Swing', 'Blinking', 'Door', 'Stop', 'Alligator', 'Dance', 'Skip', 'Football', 'Head', 'Kick'];
-
-  var newWord = words[Math.floor(Math.random() * words.length)];
-  return newWord;
-
+.factory('Users', function($firebaseObject) {
+  var drawerRef = new Firebase('https://ionic-auth-demo.firebaseio.com/drawers');
+  return $firebaseObject(drawerRef);
 })
 
-.controller('AppCtrl', function($ionicScrollDelegate, $scope, FBURL, $ionicModal, $timeout, RandomWord) {
-  $scope.drawer = {
-    word: RandomWord
-  }
-
-
-  // GAME PRESENCE
-  // var playingState = { Drawing: 0, Guessing: 1 };
-  // watch for drawer's state
-
-
-  // var listRef = new Firebase("https://ionic-auth-demo.firebaseio.com/presence/");
-  // var userRef = listRef.push();
-  // var presenceRef = new Firebase("https://ionic-auth-demo.firebaseio.com/.info/connected");
-  // presenceRef.on("value", function(snap) {
-  //   if (snap.val()) {
-  //     userRef.set(true);
-  //     // Remove ourselves when we disconnect.
-  //     userRef.onDisconnect().remove();
-  //   }
-  // });
-  //
-  // // Number of online users is the number of objects in the presence list.
-  // listRef.on("value", function(snap) {
-  //   console.log("# of online users = " + snap.numChildren());
-  // });
+.controller('AppCtrl', function($ionicScrollDelegate, $scope, FBURL, $ionicModal, $timeout, $ionicSideMenuDelegate, Users) {
 
   var ref = FBURL.db;
   var pixelDataRef = ref.child('canvas');
-
-  var drawerRef = ref.child('drawer/online');
-  var guessersRef = ref.child('guessers/online');
-
-  assignDrawer();
-
-  //TODO(): User Logic
-  function assignDrawer() {
-    drawerRef.transaction(function(onlineVal) {
-      if (onlineVal === null) {
-        return true;
-      } else {
-        assignGuesser();
-      }
-    }, function(error, committed) {
-      if (committed) {
-        // we're the drawer
-        $scope.drawer = true;
-        console.log('drawer');
-      } else {}
-    });
-  };
-
-  function assignGuesser() {
-    guessersRef.authAnonymously(function(error, authData) {
-      if (error) {
-        console.log(error);
-      } else {
-        console.log("guesser")
-        var guesserOnlineRef = guessersRef.child(authData.uid);
-        guesserOnlineRef.set(true);
-        guesserOnlineRef.onDisconnect().remove();
-      }
-    });
-  };
-
-  drawerRef.onDisconnect().remove();
 
   // DRAWING CANVAS
   //Set up some globals
@@ -233,6 +168,9 @@ angular.module('starter', ['ionic', 'firebase'])
   pixelDataRef.on('child_removed', clearPixel);
 
   //Auth
+
+  $scope.users = Users;
+
   $ionicModal.fromTemplateUrl('templates/modal.html', {
     scope: $scope
   }).then(function(modal) {
@@ -253,12 +191,13 @@ angular.module('starter', ['ionic', 'firebase'])
       }
     });
   };
-  //
+
   FBURL.auth.$onAuth(function(authData) {
     if (authData === null) {
       console.log('Not logged in yet');
     } else {
       console.log('Logged in as', authData.uid);
+      ref.child('drawers').child(authData.uid).set(authData);
       // $scope.modal.hide();
       $ionicScrollDelegate.resize();
 
@@ -266,4 +205,8 @@ angular.module('starter', ['ionic', 'firebase'])
     $scope.authData = authData; // This will display the user's name in our view
   });
 
-})
+  $scope.toggleRight = function() {
+    $ionicSideMenuDelegate.toggleRight();
+  };
+
+});
