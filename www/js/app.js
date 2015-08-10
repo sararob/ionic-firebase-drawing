@@ -204,8 +204,4 @@ angular.module('starter', ['ionic', 'firebase'])
     $scope.authData = authData; // This will display the user's name in our view
   });
 
-  $scope.toggleRight = function() {
-    $ionicSideMenuDelegate.toggleRight();
-  };
-
 });

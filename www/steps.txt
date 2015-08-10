@@ -1,0 +1,96 @@
+1. Start with blank template
+2. Paste in css
+3. Authentication, add in login button:
+
+
+<body ng-app="starter" ng-cloak>
+
+  <ion-side-menus ng-controller="AppCtrl">
+
+    <ion-side-menu-content>
+      <ion-header-bar class="bar-stable">
+        <div class="title">Realtime Drawing!</div>
+      </ion-header-bar>
+
+      <ion-content>
+        <button ng-click="modal.show()" ng-hide="authData" class="button button-positive button-block">Login</button>
+        <div ng-show="authData">
+            We're authenticated!
+        </div>
+      </ion-content>
+    </ion-side-menu-content>
+
+  </ion-side-menus>
+
+</body>
+
+4. Add the modal to templates/modal.html:
+
+<ion-modal-view>
+  <ion-content>
+    <button class="button button-calm icon ion-social-twitter button-round" ng-click="login('twitter')"></button>
+  </ion-content>
+</ion-modal-view>
+
+5. Add FB factory:
+
+.factory('FBURL', function($firebaseAuth) {
+  var usersRef = new Firebase('https://ionic-auth-demo.firebaseio.com/');
+  var data = {
+    auth: $firebaseAuth(usersRef),
+    db: usersRef
+  }
+  return data;
+})
+
+6. Auth functions:
+
+  $scope.login = function(authMethod) {
+    FBURL.auth.$authWithOAuthRedirect(authMethod).then(function(authData) {
+      console.log(authData);
+    }).catch(function(error) {
+      if (error.code === 'TRANSPORT_UNAVAILABLE') {
+        FBURL.auth.$authWithOAuthPopup(authMethod).then(function(authData) {
+          console.log(authData);
+          $scope.modal.hide();
+        });
+      } else {
+        console.log(error);
+      }
+    });
+  };
+
+  FBURL.auth.$onAuth(function(authData) {
+    if (authData === null) {
+      console.log('Not logged in yet');
+    } else {
+      console.log('Logged in as', authData.uid);
+      ref.child('drawers').child(authData.uid).set(authData);
+      // $scope.modal.hide();
+      $ionicScrollDelegate.resize();
+
+    }
+    $scope.authData = authData; // This will display the user's name in our view
+  });
+
+7. Add canvas HTML + JS
+
+8. Side menu to see who's online
+
+
+    <!-- Right menu -->
+    <ion-side-menu side="left">
+      <ion-header-bar>
+        <h1 class="title">Who's drawing?</h1>
+      </ion-header-bar>
+      <ion-content>
+        <ion-list>
+          <ion-item ng-repeat="user in users">
+            <img class="profile-img" ng-src={{user.twitter.profileImageURL}}/>
+            <div class="twitter-username">@{{user.twitter.username}}</div>
+          </ion-item>
+        </ion-list>
+      </ion-content>
+    </ion-side-menu>
+
+9. Firebase deploy
