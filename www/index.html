@@ -27,6 +27,9 @@
   <script src="lib/angularfire/dist/angularfire.js"></script>
 
   <!-- your app's js -->
+  <script src="js/canvas.js"></script>
+  <script src="js/factory.js"></script>
+
   <script src="js/app.js"></script>
 </head>
 
@@ -42,7 +45,7 @@
 
       <ion-content>
         <button ng-click="modal.show()" ng-hide="authData" class="button button-positive button-block">Login</button>
-        <div ng-show="authData">
+        <div ng-show="authData" ng-controller="canvasCtrl">
           <div class="l-demo-container">
             <canvas id="drawing-canvas" width="300" height="300"></canvas>
           </div>
@@ -59,7 +62,7 @@
       </ion-header-bar>
       <ion-content>
         <ion-list>
-          <ion-item ng-repeat="user in users">
+          <ion-item ng-repeat="user in users" class="item-avatar">
             <img class="profile-img" ng-src={{user.twitter.profileImageURL}}/>
             <div class="twitter-username">@{{user.twitter.username}}</div>
           </ion-item>
