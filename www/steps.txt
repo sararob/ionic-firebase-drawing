@@ -1,7 +1,10 @@
 1. Start with blank template
-2. Paste in css
-3. Authentication, add in login button:
 
+2. Paste in css
+
+3. Include Firebase / AngularFire in index.html
+
+4. Authentication, add in login button (show enabling auth in dashboard):
 
 <body ng-app="starter" ng-cloak>
 
@@ -24,7 +27,7 @@
 
 </body>
 
-4. Add the modal to templates/modal.html:
+5. Add the modal to templates/modal.html:
 
 <ion-modal-view>
   <ion-content>
@@ -32,7 +35,7 @@
   </ion-content>
 </ion-modal-view>
 
-5. Add FB factory:
+6. Add FB factory:
 
 .factory('FBURL', function($firebaseAuth) {
   var usersRef = new Firebase('https://ionic-auth-demo.firebaseio.com/');
@@ -43,7 +46,7 @@
   return data;
 })
 
-6. Auth functions:
+7. Auth functions:
 
   $scope.login = function(authMethod) {
     FBURL.auth.$authWithOAuthRedirect(authMethod).then(function(authData) {
@@ -65,22 +68,20 @@
       console.log('Not logged in yet');
     } else {
       console.log('Logged in as', authData.uid);
-      ref.child('drawers').child(authData.uid).set(authData);
-      // $scope.modal.hide();
       $ionicScrollDelegate.resize();
 
     }
     $scope.authData = authData; // This will display the user's name in our view
   });
 
-7. Add canvas HTML + JS
+8. Add canvas HTML + JS
 
   <div class="l-demo-container">
     <canvas id="drawing-canvas" width="300" height="300"></canvas>
   </div>
   <div id="colorholder"></div>
 
-8. Side menu to see who's online
+9. Side menu to see who's online
 
     Save user data to Firebase with a Users factory:
 
@@ -115,4 +116,4 @@
       </ion-content>
     </ion-side-menu>
 
-9. Firebase deploy!
+10. Firebase deploy!
