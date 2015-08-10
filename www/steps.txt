@@ -75,10 +75,32 @@
 
 7. Add canvas HTML + JS
 
+  <div class="l-demo-container">
+    <canvas id="drawing-canvas" width="300" height="300"></canvas>
+  </div>
+  <div id="colorholder"></div>
+
 8. Side menu to see who's online
 
+    Save user data to Firebase with a Users factory:
 
-    <!-- Right menu -->
+        .factory('Users', function($firebaseObject) {
+          var drawerRef = new Firebase('https://ionic-auth-demo.firebaseio.com/drawers');
+          return $firebaseObject(drawerRef);
+        })
+
+    Define Users on the scope:
+
+        $scope.users = Users;
+
+    Edit $onAuth function to save the user data to Firebase
+
+        $scope.users[authData.uid] = authData;
+        $scope.users.$save();
+
+    Add left sidebar to display user data:
+
+    <!-- Left menu -->
     <ion-side-menu side="left">
       <ion-header-bar>
         <h1 class="title">Who's drawing?</h1>
@@ -93,4 +115,4 @@
       </ion-content>
     </ion-side-menu>
 
-9. Firebase deploy
+9. Firebase deploy!

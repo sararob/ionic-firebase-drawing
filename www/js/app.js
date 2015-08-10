@@ -19,7 +19,7 @@ angular.module('starter', ['ionic', 'firebase'])
   })
 
 .factory('FBURL', function($firebaseAuth) {
-  var usersRef = new Firebase('https://ionic-auth-demo.firebaseio.com/');
+  var usersRef = new Firebase('https://ngboston.firebaseio.com/');
   var data = {
     auth: $firebaseAuth(usersRef),
     db: usersRef
@@ -28,7 +28,7 @@ angular.module('starter', ['ionic', 'firebase'])
 })
 
 .factory('Users', function($firebaseObject) {
-  var drawerRef = new Firebase('https://ionic-auth-demo.firebaseio.com/drawers');
+  var drawerRef = new Firebase('https://ngboston.firebaseio.com/drawers');
   return $firebaseObject(drawerRef);
 })
 
@@ -196,8 +196,8 @@ angular.module('starter', ['ionic', 'firebase'])
       console.log('Not logged in yet');
     } else {
       console.log('Logged in as', authData.uid);
-      ref.child('drawers').child(authData.uid).set(authData);
-      // $scope.modal.hide();
+      $scope.users[authData.uid] = authData;
+      $scope.users.$save();
       $ionicScrollDelegate.resize();
 
     }
