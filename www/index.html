@@ -27,29 +27,51 @@
   <script src="lib/angularfire/dist/angularfire.js"></script>
 
   <!-- your app's js -->
+  <script src="js/canvas.js"></script>
+  <script src="js/factory.js"></script>
+
   <script src="js/app.js"></script>
 </head>
 
 <body ng-app="starter" ng-cloak>
 
-  <ion-pane ng-controller="AppCtrl">
-    <ion-header-bar class="bar-stable">
-      <div class="title" ng-show="drawer">You are drawing!</div>
-    </ion-header-bar>
-    <ion-content>
-      <button ng-click="modal.show()" ng-hide="authData" class="button button-positive button-block">Login</button>
-      <div ng-show="authData">
-        <div class="l-demo-container">
-          <canvas id="drawing-canvas" width="300" height="300"></canvas>
-        </div>
-        <div id="colorholder"></div>
+  <ion-side-menus ng-controller="AppCtrl">
 
-        <div class="word">
-          {{drawer.word}}
+    <ion-side-menu-content>
+      <ion-header-bar class="bar-stable">
+        <button class="button button-icon ion-person" menu-toggle="left"></button>
+        <div class="title">Realtime Drawing!</div>
+      </ion-header-bar>
+
+      <ion-content>
+        <button ng-click="modal.show()" ng-hide="authData" class="button button-positive button-block">Login</button>
+        <div ng-show="authData" ng-controller="canvasCtrl">
+          <div class="l-demo-container">
+            <canvas id="drawing-canvas" width="300" height="300"></canvas>
+          </div>
+          <div id="colorholder"></div>
+
         </div>
-      </div>
-    </ion-content>
-  </ion-pane>
+      </ion-content>
+    </ion-side-menu-content>
+
+    <!-- Left menu -->
+    <ion-side-menu side="left">
+      <ion-header-bar>
+        <h1 class="title">Who's drawing?</h1>
+      </ion-header-bar>
+      <ion-content>
+        <ion-list>
+          <ion-item ng-repeat="user in users" class="item-avatar">
+            <img class="profile-img" ng-src={{user.twitter.profileImageURL}}/>
+            <div class="twitter-username">@{{user.twitter.username}}</div>
+          </ion-item>
+        </ion-list>
+      </ion-content>
+    </ion-side-menu>
+
+  </ion-side-menus>
+
 </body>
 
 </html>
