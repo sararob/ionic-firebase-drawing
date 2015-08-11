@@ -2,7 +2,7 @@
 
 2. Paste in css
 
-3. Include Firebase / AngularFire in index.html
+3. Include Firebase / AngularFire in index.html and lib/
 
 4. Authentication, add in login button (show enabling auth in dashboard):
 
@@ -35,16 +35,20 @@
   </ion-content>
 </ion-modal-view>
 
-6. Add FB factory:
+6. Add FB factory in factory.js:
+
+angular.module('appFactory', [])
 
 .factory('FBURL', function($firebaseAuth) {
-  var usersRef = new Firebase('https://ionic-auth-demo.firebaseio.com/');
+  var usersRef = new Firebase('https://ngboston.firebaseio.com/');
   var data = {
     auth: $firebaseAuth(usersRef),
     db: usersRef
   }
   return data;
 })
+
+  And add appFactory to app.js ['ionic', 'firebase', 'appFactory']
 
 7. Auth functions:
 
@@ -74,19 +78,28 @@
     $scope.authData = authData; // This will display the user's name in our view
   });
 
-8. Add canvas HTML + JS
+8. Add canvas HTML + JS, and connect to canvasCtrl
 
-  <div class="l-demo-container">
-    <canvas id="drawing-canvas" width="300" height="300"></canvas>
-  </div>
-  <div id="colorholder"></div>
+    <div ng-show="authData" ng-controller="canvasCtrl">
+      <div class="l-demo-container">
+        <canvas id="drawing-canvas" width="300" height="300"></canvas>
+      </div>
+      <div id="colorholder"></div>
 
-9. Side menu to see who's online
+    </div>
+
+9. Paste in canvas JS js/canvas.js and add canvasCtrl to index.html
+
+angular.module('drawCanvas', [])
+
+.controller('canvasCtrl', canvasCtrl);
+
+10. Side menu to see who's online
 
     Save user data to Firebase with a Users factory:
 
         .factory('Users', function($firebaseObject) {
-          var drawerRef = new Firebase('https://ionic-auth-demo.firebaseio.com/drawers');
+          var drawerRef = new Firebase('https://ngboston.firebaseio.com/drawers');
           return $firebaseObject(drawerRef);
         })
 
@@ -116,4 +129,4 @@
       </ion-content>
     </ion-side-menu>
 
-10. Firebase deploy!
+11. Firebase deploy!
