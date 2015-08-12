@@ -30,17 +30,9 @@ angular.module('starter', ['ionic', 'firebase', 'drawCanvas', 'appFactory'])
   });
 
   $scope.login = function(authMethod) {
-    FBURL.auth.$authWithOAuthRedirect(authMethod).then(function(authData) {
+    FBURL.auth.$authWithOAuthPopup(authMethod).then(function(authData) {
       console.log(authData);
-    }).catch(function(error) {
-      if (error.code === 'TRANSPORT_UNAVAILABLE') {
-        FBURL.auth.$authWithOAuthPopup(authMethod).then(function(authData) {
-          console.log(authData);
-          $scope.modal.hide();
-        });
-      } else {
-        console.log(error);
-      }
+      $scope.modal.hide();
     });
   };
 
