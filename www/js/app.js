@@ -18,10 +18,7 @@ angular.module('starter', ['ionic', 'firebase', 'drawCanvas', 'appFactory'])
   });
 })
 
-.controller('AppCtrl', function($ionicScrollDelegate, $scope, FBURL, $ionicModal, $timeout, $ionicSideMenuDelegate, Users) {
-  //Auth
-
-  $scope.users = Users;
+.controller('AppCtrl', function($ionicScrollDelegate, $scope, FBURL, $ionicModal, $timeout, $ionicSideMenuDelegate) {
 
   $ionicModal.fromTemplateUrl('templates/modal.html', {
     scope: $scope
@@ -41,8 +38,7 @@ angular.module('starter', ['ionic', 'firebase', 'drawCanvas', 'appFactory'])
       console.log('Not logged in yet');
     } else {
       console.log('Logged in as', authData.uid);
-      $scope.users[authData.uid] = authData;
-      $scope.users.$save();
+      FBURL.db.child('users').child(authData.uid).set(authData);
       $ionicScrollDelegate.resize();
 
     }

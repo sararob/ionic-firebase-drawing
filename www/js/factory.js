@@ -8,8 +8,3 @@ angular.module('appFactory', [])
   }
   return data;
 })
-
-.factory('Users', function($firebaseObject) {
-  var drawerRef = new Firebase('https://ngboston.firebaseio.com/drawers');
-  return $firebaseObject(drawerRef);
-})
