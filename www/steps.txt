@@ -1,59 +1,22 @@
 1. Start with blank template
 
-2. Paste in css
+2. Paste in css (css)
 
-3. Include Firebase / AngularFire in index.html and lib/
+3. Include Firebase, AngularFire, and jQuery in index.html (includes). Add Firebase to app module ['ionic', 'firebase']
 
 4. Authentication, add in login button (show enabling auth in dashboard):
 
-<body ng-app="starter" ng-cloak>
+  (auth-html)
 
-  <ion-side-menus ng-controller="AppCtrl">
-
-    <ion-side-menu-content>
-      <ion-header-bar class="bar-stable">
-        <div class="title">Realtime Drawing!</div>
-      </ion-header-bar>
-
-      <ion-content>
-        <button ng-click="modal.show()" ng-hide="authData" class="button button-positive button-block">Login</button>
-        <div ng-show="authData">
-            We're authenticated!
-        </div>
-      </ion-content>
-    </ion-side-menu-content>
-
-  </ion-side-menus>
-
-</body>
-
-5. Add the modal to templates/modal.html:
-
-<ion-modal-view>
-  <ion-content>
-    <button class="button button-calm icon ion-social-twitter button-round" ng-click="login('twitter')"></button>
-  </ion-content>
-</ion-modal-view>
+5. Add the modal to templates/modal.html (modal)
 
 6. Add FB factory in factory.js:
 
-angular.module('appFactory', [])
-
-.factory('FBURL', function($firebaseAuth) {
-  var usersRef = new Firebase('https://ngboston.firebaseio.com/');
-  var data = {
-    auth: $firebaseAuth(usersRef),
-    db: usersRef
-  }
-  return data;
-})
+(fb-factory)
 
 Also add users Factory here with $firebaseObject:
 
-.factory('Users', function($firebaseObject) {
-  var drawerRef = new Firebase('https://ngboston.firebaseio.com/drawers');
-  return $firebaseObject(drawerRef);
-})
+(user-factory)
 
   And add appFactory to app.js ['ionic', 'firebase', 'appFactory']
 
@@ -61,94 +24,26 @@ Also add users Factory here with $firebaseObject:
 
     <script src="js/factory.js"></script>
 
-7. Add auth functions to AppCtrl:
+7. Add auth functions to AppCtrl (appctrl-1)
 
-.controller('AppCtrl', function($ionicScrollDelegate, $scope, FBURL, $ionicModal, $timeout, $ionicSideMenuDelegate, Users) {
+8. Add canvas HTML + JS, and connect to canvasCtrl. Replace "We're authenticated!" with this (canvas-html)
 
-  $scope.users = Users;
+9. Paste in canvas JS js/canvas.js (canvas-js)
 
-  $ionicModal.fromTemplateUrl('templates/modal.html', {
-    scope: $scope
-  }).then(function(modal) {
-    $scope.modal = modal;
-  });
-
-  $scope.login = function(authMethod) {
-    FBURL.auth.$authWithOAuthRedirect(authMethod).then(function(authData) {
-      console.log(authData);
-    }).catch(function(error) {
-      if (error.code === 'TRANSPORT_UNAVAILABLE') {
-        FBURL.auth.$authWithOAuthPopup(authMethod).then(function(authData) {
-          console.log(authData);
-          $scope.modal.hide();
-        });
-      } else {
-        console.log(error);
-      }
-    });
-  };
-
-  FBURL.auth.$onAuth(function(authData) {
-    if (authData === null) {
-      console.log('Not logged in yet');
-    } else {
-      console.log('Logged in as', authData.uid);
-      $ionicScrollDelegate.resize();
-
-    }
-    $scope.authData = authData; // This will display the user's name in our view
-  });
-
-})
-
-8. Add canvas HTML + JS, and connect to canvasCtrl. Replace "We're authenticated!" with this:
-
-  <div class="l-demo-container">
-    <canvas id="drawing-canvas" width="300" height="300"></canvas>
-  </div>
-  <div id="colorholder"></div>
-
-9. Paste in canvas JS js/canvas.js and add canvasCtrl to index.html
-
-angular.module('drawCanvas', [])
-
-.controller('canvasCtrl', canvasCtrl);
-console.clear();
-function canvasCtrl(FBURL) {
-}
-
-  Add 'canvasCtrl' to our angular.module definition and include canvas.js in index.html:
+  Add 'drawCanvas' to our angular.module definition and include canvas.js in index.html:
 
   <script src="js/canvas.js"></script>
-
-  Include jQuery??
-  <script type='text/javascript' src='https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js'></script>
 
 10. Side menu to see who's online:
 
     Edit $onAuth function to save the user data to Firebase
 
-        $scope.users[authData.uid] = authData;
-        $scope.users.$save();
+        (save-users)
 
     Add left sidebar to display user data:
 
-    <!-- Left menu -->
-    <ion-side-menu side="left">
-      <ion-header-bar>
-        <h1 class="title">Who's drawing?</h1>
-      </ion-header-bar>
-      <ion-content>
-        <ion-list>
-          <ion-item ng-repeat="user in users">
-            <img class="profile-img" ng-src={{user.twitter.profileImageURL}}/>
-            <div class="twitter-username">@{{user.twitter.username}}</div>
-          </ion-item>
-        </ion-list>
-      </ion-content>
-    </ion-side-menu>
+      (left-sidebar)
 
-    Add a user icon to the header:
-    <button class="button button-icon ion-person" menu-toggle="left"></button>
+    Add a user icon to the header (user-sidebar)
 
 11. Firebase deploy!
